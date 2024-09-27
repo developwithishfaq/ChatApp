@@ -3,38 +3,45 @@ package com.test.chatappcopy.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.test.chatappcopy.presentation.test.TestScreen
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.test.chatappcopy.presentation.auth.AuthenticationScreen
+import com.test.chatappcopy.presentation.chat.ChatScreen
+import com.test.chatappcopy.presentation.home.HomeScreen
+import com.test.chatappcopy.presentation.navigation.Routes
 import com.test.chatappcopy.ui.theme.ChatAppCopyTheme
+
+val LocalNavController = compositionLocalOf<NavHostController> {
+    error("")
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        enableEdgeToEdge()
         setContent {
+            val navController = rememberNavController()
             ChatAppCopyTheme {
-                TestScreen()
+                CompositionLocalProvider(LocalNavController provides navController) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = Routes.AuthScreen.name
+                    ) {
+                        composable(Routes.AuthScreen.name) {
+                            AuthenticationScreen()
+                        }
+                        composable(Routes.HomeScreen.name) {
+                            HomeScreen()
+                        }
+                        composable(Routes.ChatScreen.name+"/{chatId}") {
+                            ChatScreen()
+                        }
+                    }
+                }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ChatAppCopyTheme {
-        Greeting("Android")
     }
 }

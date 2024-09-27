@@ -76,6 +76,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("androidx.navigation:navigation-compose:2.8.0")
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-process:2.8.5")
 
 
 }
